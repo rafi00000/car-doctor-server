@@ -66,8 +66,22 @@ async function run() {
       const result = await bookingCollection.insertOne(bookings);
       res.send(result)
     })
+
+    app.delete('/bookings/:id', async(req, res) =>{
+      const id = req.params.id;
+      console.log('req: ', id);
+      const query = {_id: new ObjectId(id)} ;
+      const result = bookingCollection.deleteOne(query);
+      res.send(result);
+    })
     
 
+    // jwt auth
+
+    app.post('/jwt', async(req, res) =>{
+      const user = req.body;
+      const token = jwt.sign({user}, 'secret', {expiresIn: '1h'}) ;
+    })
     
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
